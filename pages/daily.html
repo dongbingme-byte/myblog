@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日常 · 我的小角落</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  .timeline {
+    padding: 5rem 4rem;
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+  .timeline-date {
+    text-align: right;
+    padding-top: 0.2rem;
+  }
+
+  .timeline-date .month {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moss-light);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .timeline-date .day {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .timeline-body {
+    border-left: 1px solid var(--border);
+    padding-left: 3rem;
+    position: relative;
+  }
+
+  .timeline-body::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--moss);
+    position: absolute;
+    left: -4.5px; top: 0.4rem;
+  }
+
+  .timeline-mood {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .timeline-text {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--ink-light);
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.7rem;
+    border: 1px solid var(--border);
+    color: var(--ink-light);
+    text-transform: uppercase;
+  }
+
+  /* 写新日常入口 */
+  .new-post-hint {
+    text-align: center;
+    padding: 3rem;
+    border: 1px dashed var(--border);
+    margin-bottom: 4rem;
+    color: var(--ink-light);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 900px) {
+    .timeline { padding: 3rem 2rem; }
+    .timeline-item { grid-template-columns: 70px 1fr; gap: 1.5rem; }
+    .timeline-body { padding-left: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">我的<span>·</span>小角落</a>
+  <ul class="nav-links">
+    <li><a href="daily.html" class="active">日常</a></li>
+    <li><a href="essays.html">随笔</a></li>
+    <li><a href="photos.html">照片</a></li>
+    <li><a href="art.html">画作</a></li>
+    <li><a href="about.html">关于</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <p class="page-header-eyebrow">Daily Life</p>
+  <h1>☀️ 日常</h1>
+  <p>生活里的小确幸、流水账、心情碎片。<br>短小轻松，不需要起承转合。</p>
+</div>
+
+<div class="timeline">
+
+  <div class="new-post-hint">
+    ✏️ 在 <code>posts/daily/</code> 文件夹里新建 .md 文件，即可添加新日常
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-date">
+      <span class="month">Mar</span>
+      <span class="day">08</span>
+    </div>
+    <div class="timeline-body">
+      <div class="timeline-mood">🌸</div>
+      <p class="timeline-text">
+        今天去公园，发现玉兰开了。白色的，大朵大朵的，衬着灰蓝的天空，
+        像是谁随手挂上去的。拍了很多照片，但总觉得拍不出那种感觉——
+        春天的光是流动的，相机存不住。
+      </p>
+      <div class="timeline-tags">
+        <span class="tag">春天</span>
+        <span class="tag">散步</span>
+        <span class="tag">拍照</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-date">
+      <span class="month">Mar</span>
+      <span class="day">05</span>
+    </div>
+    <div class="timeline-body">
+      <div class="timeline-mood">☕</div>
+      <p class="timeline-text">
+        在家工作的一天。泡了一壶乌龙，开着窗，偶尔有风吹进来。
+        猫咪趴在键盘上睡着了，我只好用手机继续打字。
+        这种日子，平淡得刚刚好。
+      </p>
+      <div class="timeline-tags">
+        <span class="tag">在家</span>
+        <span class="tag">猫咪</span>
+        <span class="tag">工作日</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-date">
+      <span class="month">Feb</span>
+      <span class="day">28</span>
+    </div>
+    <div class="timeline-body">
+      <div class="timeline-mood">🍜</div>
+      <p class="timeline-text">
+        中午吃了一碗热腾腾的面，汤是浓的，葱花切得细碎。
+        窗外有人在晒被子，阳光很足。突然觉得，
+        这就够了。
+      </p>
+      <div class="timeline-tags">
+        <span class="tag">吃吃吃</span>
+        <span class="tag">小满足</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline-item">
+    <div class="timeline-date">
+      <span class="month">Feb</span>
+      <span class="day">22</span>
+    </div>
+    <div class="timeline-body">
+      <div class="timeline-mood">🌧️</div>
+      <p class="timeline-text">
+        下雨了。出门忘带伞，在便利店门口站了二十分钟。
+        后来雨没停，就买了一杯热可可，淋着回家了。
+        湿透的结局，意外地有点爽。
+      </p>
+      <div class="timeline-tags">
+        <span class="tag">雨天</span>
+        <span class="tag">意外</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-copy">© 2025 我的小角落 · 慢慢生长 🌿</span>
+  <div class="footer-links">
+    <a href="../index.html">首页</a>
+    <a href="about.html">关于</a>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

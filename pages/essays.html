@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>随笔 · 我的小角落</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  .essays-container {
+    padding: 5rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .essay-card {
+    display: grid;
+    grid-template-columns: 1fr 160px;
+    gap: 3rem;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease, padding 0.3s;
+  }
+
+  .essay-card.visible { opacity: 1; transform: translateY(0); }
+  .essay-card:hover { padding-left: 1rem; }
+
+  .essay-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .essay-date {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    letter-spacing: 0.06em;
+    font-weight: 300;
+  }
+
+  .essay-category {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--moss-light);
+    color: var(--moss);
+  }
+
+  .essay-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.01em;
+    transition: color 0.2s;
+  }
+
+  .essay-card:hover .essay-title { color: var(--moss); }
+
+  .essay-excerpt {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--ink-light);
+    font-weight: 300;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .essay-read {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    margin-top: 1.2rem;
+  }
+
+  .essay-image-placeholder {
+    width: 160px;
+    height: 110px;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    align-self: center;
+    transition: transform 0.3s;
+  }
+
+  .essay-card:hover .essay-image-placeholder { transform: scale(1.03); }
+
+  .featured-essay {
+    padding: 3rem;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    margin-bottom: 1px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-essay::before {
+    content: 'FEATURED';
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.2rem 0.6rem;
+  }
+
+  .featured-essay:hover { background: var(--cream); }
+
+  .featured-essay .essay-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .essays-container { padding: 3rem 2rem; }
+    .essay-card { grid-template-columns: 1fr; gap: 1.5rem; }
+    .essay-image-placeholder { width: 100%; height: 140px; }
+    .featured-essay .essay-title { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">我的<span>·</span>小角落</a>
+  <ul class="nav-links">
+    <li><a href="daily.html">日常</a></li>
+    <li><a href="essays.html" class="active">随笔</a></li>
+    <li><a href="photos.html">照片</a></li>
+    <li><a href="art.html">画作</a></li>
+    <li><a href="about.html">关于</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <p class="page-header-eyebrow">Essays</p>
+  <h1>🖊️ 随笔</h1>
+  <p>长文思考、读书笔记、人生感悟。<br>有深度、有温度，值得慢慢读。</p>
+</div>
+
+<div class="essays-container">
+
+  <!-- 置顶精选 -->
+  <a href="#" class="featured-essay">
+    <div class="essay-meta">
+      <span class="essay-date">2025.03.05</span>
+      <span class="essay-category">读书</span>
+    </div>
+    <h2 class="essay-title">读《活着》之后，我想说一些不轻巧的话</h2>
+    <p class="essay-excerpt">
+      很多年前读过《活着》，当时只是哭了一场，然后放下了。
+      这次重读，却有一种被什么东西击中的感觉——不是悲伤，而是某种沉甸甸的清醒……
+    </p>
+    <p class="essay-read">阅读约 8 分钟</p>
+  </a>
+
+  <!-- 文章列表 -->
+  <a href="#" class="essay-card">
+    <div>
+      <div class="essay-meta">
+        <span class="essay-date">2025.02.24</span>
+        <span class="essay-category">生活</span>
+      </div>
+      <h2 class="essay-title">关于「慢生活」这件事，我改变了一些想法</h2>
+      <p class="essay-excerpt">
+        曾经以为慢生活是一种选择，后来发现它更像是一种能力。不是不想快，
+        而是在某些时刻，你学会了允许自己慢下来……
+      </p>
+      <p class="essay-read">阅读约 5 分钟</p>
+    </div>
+    <div class="essay-image-placeholder">🌿</div>
+  </a>
+
+  <a href="#" class="essay-card">
+    <div>
+      <div class="essay-meta">
+        <span class="essay-date">2025.02.10</span>
+        <span class="essay-category">思考</span>
+      </div>
+      <h2 class="essay-title">我为什么开始记录自己的生活</h2>
+      <p class="essay-excerpt">
+        不是因为想被看见，而是因为怕忘记。时间这件事，
+        比我们想象的更擅长抹去痕迹……
+      </p>
+      <p class="essay-read">阅读约 4 分钟</p>
+    </div>
+    <div class="essay-image-placeholder">📓</div>
+  </a>
+
+  <a href="#" class="essay-card">
+    <div>
+      <div class="essay-meta">
+        <span class="essay-date">2025.01.28</span>
+        <span class="essay-category">旅行</span>
+      </div>
+      <h2 class="essay-title">一个人去了一趟山里，待了三天</h2>
+      <p class="essay-excerpt">
+        没有计划，没有攻略。背包里装了换洗衣服、一本书和一盒速溶咖啡。
+        后来发现，这是我近几年做过最对的一件事……
+      </p>
+      <p class="essay-read">阅读约 6 分钟</p>
+    </div>
+    <div class="essay-image-placeholder">🏔️</div>
+  </a>
+
+</div>
+
+<footer>
+  <span class="footer-copy">© 2025 我的小角落 · 慢慢生长 🌿</span>
+  <div class="footer-links">
+    <a href="../index.html">首页</a>
+    <a href="about.html">关于</a>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.essay-card').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

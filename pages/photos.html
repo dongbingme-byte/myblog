@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>照片 · 我的小角落</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  .photos-container {
+    padding: 5rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 相册分组 */
+  .album-section { margin-bottom: 5rem; }
+
+  .album-title {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .album-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+  }
+
+  .album-title span {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* 瀑布流网格 */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+  }
+
+  .photo-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+
+  .photo-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    opacity: 0;
+    transform: scale(0.97);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .photo-item.visible { opacity: 1; transform: scale(1); }
+
+  .photo-item.tall { grid-row: span 2; }
+  .photo-item.wide { grid-column: span 2; }
+
+  .photo-placeholder {
+    width: 100%;
+    padding-bottom: 100%;
+    position: relative;
+    background: linear-gradient(135deg, var(--warm-white), #EDE8E0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .photo-item.tall .photo-placeholder { padding-bottom: 200%; }
+  .photo-item.wide .photo-placeholder { padding-bottom: 50%; }
+
+  .photo-emoji {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+  }
+
+  .photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(28,28,26,0.7) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.2rem;
+  }
+
+  .photo-item:hover .photo-overlay { opacity: 1; }
+
+  .photo-caption {
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .photo-caption strong {
+    display: block;
+    font-weight: 400;
+    margin-bottom: 0.2rem;
+    font-size: 0.85rem;
+  }
+
+  /* 灯箱 */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(28,28,26,0.95);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .lightbox.open { display: flex; }
+
+  .lightbox-content {
+    font-size: 8rem;
+    animation: lightboxIn 0.3s ease;
+  }
+
+  @keyframes lightboxIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .lightbox-caption {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    font-weight: 300;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    background: none;
+    border: none;
+  }
+  .lightbox-close:hover { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .photos-container { padding: 3rem 2rem; }
+    .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    .photo-item.tall { grid-row: span 1; }
+    .photo-item.wide { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">我的<span>·</span>小角落</a>
+  <ul class="nav-links">
+    <li><a href="daily.html">日常</a></li>
+    <li><a href="essays.html">随笔</a></li>
+    <li><a href="photos.html" class="active">照片</a></li>
+    <li><a href="art.html">画作</a></li>
+    <li><a href="about.html">关于</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <p class="page-header-eyebrow">Photography</p>
+  <h1>📷 照片</h1>
+  <p>用镜头留住的光与影。<br>城市角落、旅途风景、日常之美。</p>
+</div>
+
+<div class="photos-container">
+
+  <!-- 春天相册 -->
+  <div class="album-section">
+    <div class="album-title">
+      <h2>🌸 2025 春·城市</h2>
+      <span>6 张</span>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-item tall" onclick="openLightbox('🌸', '玉兰开了 · 三月初')">
+        <div class="photo-placeholder"><div class="photo-emoji">🌸</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>玉兰开了</strong>三月初，公园里</div>
+        </div>
+      </div>
+      <div class="photo-item" onclick="openLightbox('🏙️', '城市的傍晚 · 楼顶')">
+        <div class="photo-placeholder"><div class="photo-emoji">🏙️</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>城市傍晚</strong>楼顶拍的</div>
+        </div>
+      </div>
+      <div class="photo-item" onclick="openLightbox('🌿', '绿意 · 街角')">
+        <div class="photo-placeholder"><div class="photo-emoji">🌿</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>街角绿意</strong>春天的颜色</div>
+        </div>
+      </div>
+      <div class="photo-item wide" onclick="openLightbox('🌅', '晨光 · 窗边')">
+        <div class="photo-placeholder"><div class="photo-emoji">🌅</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>晨光</strong>早上七点的窗边</div>
+        </div>
+      </div>
+      <div class="photo-item" onclick="openLightbox('☕', '咖啡馆的下午')">
+        <div class="photo-placeholder"><div class="photo-emoji">☕</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>咖啡馆</strong>周末下午</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 旅途相册 -->
+  <div class="album-section">
+    <div class="album-title">
+      <h2>🏔️ 2025 冬·山里三天</h2>
+      <span>4 张</span>
+    </div>
+    <div class="photo-grid two-col">
+      <div class="photo-item" onclick="openLightbox('🌲', '山里的清晨')">
+        <div class="photo-placeholder"><div class="photo-emoji">🌲</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>山里的清晨</strong>六点，雾还没散</div>
+        </div>
+      </div>
+      <div class="photo-item tall" onclick="openLightbox('🏔️', '山顶远眺')">
+        <div class="photo-placeholder"><div class="photo-emoji">🏔️</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>山顶</strong>爬了两个小时</div>
+        </div>
+      </div>
+      <div class="photo-item" onclick="openLightbox('🔥', '篝火夜晚')">
+        <div class="photo-placeholder"><div class="photo-emoji">🔥</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>篝火</strong>第二晚</div>
+        </div>
+      </div>
+      <div class="photo-item" onclick="openLightbox('🌙', '山里的星空')">
+        <div class="photo-placeholder"><div class="photo-emoji">🌙</div></div>
+        <div class="photo-overlay">
+          <div class="photo-caption"><strong>星空</strong>没有光污染</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-content" id="lightbox-emoji"></div>
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<footer>
+  <span class="footer-copy">© 2025 我的小角落 · 慢慢生长 🌿</span>
+  <div class="footer-links">
+    <a href="../index.html">首页</a>
+    <a href="about.html">关于</a>
+  </div>
+</footer>
+
+<script>
+  function openLightbox(emoji, caption) {
+    document.getElementById('lightbox-emoji').textContent = emoji;
+    document.getElementById('lightbox-caption').textContent = caption;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.photo-item').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

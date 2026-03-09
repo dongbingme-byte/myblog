@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>画作 · 我的小角落</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  .art-container {
+    padding: 5rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 筛选标签 */
+  .filter-bar {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 1.2rem;
+    border: 1px solid var(--border);
+    background: none;
+    cursor: pointer;
+    color: var(--ink-light);
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--moss);
+    color: white;
+    border-color: var(--moss);
+  }
+
+  /* 画廊网格 */
+  .art-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .art-card {
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .art-card.visible { opacity: 1; transform: translateY(0); }
+
+  .art-frame {
+    position: relative;
+    overflow: hidden;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    margin-bottom: 1rem;
+    padding-bottom: 100%;
+  }
+
+  .art-card.landscape .art-frame { padding-bottom: 70%; }
+  .art-card.portrait .art-frame { padding-bottom: 130%; }
+
+  .art-preview {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    transition: transform 0.4s ease;
+  }
+
+  .art-card:hover .art-preview { transform: scale(1.08); }
+
+  .art-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(28,28,26,0.6);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .art-card:hover .art-overlay { opacity: 1; }
+
+  .art-overlay-text {
+    color: white;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 0.5rem 1.2rem;
+  }
+
+  .art-info { padding: 0 0.2rem; }
+
+  .art-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+  }
+
+  .art-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .art-medium {
+    font-size: 0.72rem;
+    color: var(--ink-light);
+    letter-spacing: 0.06em;
+    font-weight: 300;
+  }
+
+  .art-date {
+    font-size: 0.72rem;
+    color: var(--ink-light);
+    font-weight: 300;
+  }
+
+  /* 大图查看 */
+  .art-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(28,28,26,0.95);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    padding: 4rem;
+  }
+
+  .art-modal.open { display: flex; }
+
+  .art-modal-preview {
+    font-size: 12rem;
+    animation: artIn 0.4s ease;
+  }
+
+  @keyframes artIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .art-modal-info {
+    max-width: 300px;
+    color: white;
+    animation: artIn 0.4s 0.1s ease both;
+  }
+
+  .art-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .art-modal-desc {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.7);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .art-modal-detail {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .art-modal-close {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    color: white; opacity: 0.6;
+    font-size: 1.5rem; cursor: pointer;
+    background: none; border: none;
+    transition: opacity 0.2s;
+  }
+  .art-modal-close:hover { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .art-container { padding: 3rem 2rem; }
+    .art-gallery { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    .art-modal { flex-direction: column; gap: 2rem; padding: 2rem; }
+    .art-modal-preview { font-size: 7rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">我的<span>·</span>小角落</a>
+  <ul class="nav-links">
+    <li><a href="daily.html">日常</a></li>
+    <li><a href="essays.html">随笔</a></li>
+    <li><a href="photos.html">照片</a></li>
+    <li><a href="art.html" class="active">画作</a></li>
+    <li><a href="about.html">关于</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <p class="page-header-eyebrow">Artwork</p>
+  <h1>🎨 画作</h1>
+  <p>手绘插画、数字创作。<br>每一张都是某个时刻的心情与想象。</p>
+</div>
+
+<div class="art-container">
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterArt('all', this)">全部</button>
+    <button class="filter-btn" onclick="filterArt('watercolor', this)">水彩</button>
+    <button class="filter-btn" onclick="filterArt('sketch', this)">素描</button>
+    <button class="filter-btn" onclick="filterArt('digital', this)">数字</button>
+    <button class="filter-btn" onclick="filterArt('illustration', this)">插画</button>
+  </div>
+
+  <div class="art-gallery" id="gallery">
+
+    <div class="art-card" data-category="watercolor"
+      onclick="openModal('🐱', '小女孩与猫咪', '一个慵懒的下午，用水彩笔随手画的。小女孩在看书，猫咪趴在她膝盖上。', '水彩 · A5 · 2025.03.03')">
+      <div class="art-frame">
+        <div class="art-preview">🐱</div>
+        <div class="art-overlay"><span class="art-overlay-text">查看详情</span></div>
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">小女孩与猫咪</h3>
+        <div class="art-meta">
+          <span class="art-medium">水彩</span>
+          <span class="art-date">2025.03</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card portrait" data-category="illustration"
+      onclick="openModal('🌲', '森林里的小屋', '一直想画一个藏在森林深处的小屋，烟囱里冒着烟，窗口有灯光。', '数字插画 · iPad · 2025.02.18')">
+      <div class="art-frame">
+        <div class="art-preview">🌲</div>
+        <div class="art-overlay"><span class="art-overlay-text">查看详情</span></div>
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">森林里的小屋</h3>
+        <div class="art-meta">
+          <span class="art-medium">数字插画</span>
+          <span class="art-date">2025.02</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card" data-category="sketch"
+      onclick="openModal('🌙', '月亮与睡着的人', '半夜睡不着，拿铅笔画的。很快，笔触很随意，反而喜欢。', '铅笔素描 · A4 · 2025.02.05')">
+      <div class="art-frame">
+        <div class="art-preview">🌙</div>
+        <div class="art-overlay"><span class="art-overlay-text">查看详情</span></div>
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">月亮与睡着的人</h3>
+        <div class="art-meta">
+          <span class="art-medium">素描</span>
+          <span class="art-date">2025.02</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card landscape" data-category="watercolor"
+      onclick="openModal('🌊', '海边的下午', '去海边那次，回来后凭记忆画的。水彩很难控制，但这张意外地好看。', '水彩 · A4 · 2025.01.20')">
+      <div class="art-frame">
+        <div class="art-preview">🌊</div>
+        <div class="art-overlay"><span class="art-overlay-text">查看详情</span></div>
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">海边的下午</h3>
+        <div class="art-meta">
+          <span class="art-medium">水彩</span>
+          <span class="art-date">2025.01</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card" data-category="digital"
+      onclick="openModal('🦊', '小狐狸', '给朋友画的头像，她很喜欢狐狸。用 Procreate 画的，花了整个下午。', '数字绘画 · iPad · 2024.12.15')">
+      <div class="art-frame">
+        <div class="art-preview">🦊</div>
+        <div class="art-overlay"><span class="art-overlay-text">查看详情</span></div>
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">小狐狸（朋友头像）</h3>
+        <div class="art-meta">
+          <span class="art-medium">数字</span>
+          <span class="art-date">2024.12</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-card" data-category="illustration"
+      onclick="openModal('🌸', '春日明信片', '给自己设计的春天明信片，印了十张，寄给了在各地的朋友。', '插画设计 · 数字 · 2024.03')">
+      <div class="art-frame">
+        <div class="art-preview">🌸</div>
+        <div class="art-overlay"><span class="art-overlay-text">查看详情</span></div>
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">春日明信片</h3>
+        <div class="art-meta">
+          <span class="art-medium">插画</span>
+          <span class="art-date">2024.03</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 画作详情弹窗 -->
+<div class="art-modal" id="artModal" onclick="closeModal()">
+  <button class="art-modal-close" onclick="closeModal()">✕</button>
+  <div class="art-modal-preview" id="modalEmoji"></div>
+  <div class="art-modal-info">
+    <h2 class="art-modal-title" id="modalTitle"></h2>
+    <p class="art-modal-desc" id="modalDesc"></p>
+    <p class="art-modal-detail" id="modalDetail"></p>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-copy">© 2025 我的小角落 · 慢慢生长 🌿</span>
+  <div class="footer-links">
+    <a href="../index.html">首页</a>
+    <a href="about.html">关于</a>
+  </div>
+</footer>
+
+<script>
+  function openModal(emoji, title, desc, detail) {
+    document.getElementById('modalEmoji').textContent = emoji;
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDesc').textContent = desc;
+    document.getElementById('modalDetail').textContent = detail;
+    document.getElementById('artModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    event.stopPropagation();
+  }
+  function closeModal() {
+    document.getElementById('artModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function filterArt(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.art-card').forEach(card => {
+      if (category === 'all' || card.dataset.category === category) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.art-card').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
